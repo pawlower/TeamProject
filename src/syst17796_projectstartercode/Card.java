@@ -10,16 +10,27 @@ package syst17796_projectstartercode;
  * game. Students wishing to add to the code should remember to add themselves as a modifier.
  *
  * @author dancye
+ * @author jesse thompson
  */
-public abstract class Card {
-    //default modifier for child classes
+public class Card {
+    private Values value;
+    private Suits suit;
+    
+    Card(Values value, Suits suit) {
+        this.value = value;
+        this.suit = suit;
+    }
+   
+    public Values getValue() {
+        return this.value;
+    }
 
-    /**
-     * Students should implement this method for their specific children classes
-     *
-     * @return a String representation of a card. Could be an UNO card, a regular playing card etc.
-     */
-    @Override
-    public abstract String toString();
+    public Suits getSuit() {
+        return this.suit;
+    }
+
+    public String toString() {
+        return this.value.getDispName() + " of " + this.suit.getDispName();
+    }
 
 }

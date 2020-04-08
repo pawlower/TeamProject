@@ -5,6 +5,8 @@
  */
 package syst17796_projectstartercode;
 
+import java.util.ArrayList;
+
 /**
  * A class that models each Player in the game. Players have an identifier, which should be unique.
  *
@@ -16,11 +18,14 @@ public class Player {
 
     private String name; //the unique name for this player
     private boolean playing = false;
+    private ArrayList<Card> hand = new ArrayList<Card>();
+    private int bet = 0;
     
     // A constructor that allows you to set the player's unique ID
 
-    public Player(String name) {
+    public Player(String name, int bet) {
         this.name = name;
+        this.bet = bet;
         this.playing = true;
     }
 
@@ -34,12 +39,13 @@ public class Player {
         this.name = name;
     }
 
-    /**
-     * The method to be overridden when you subclass the Player class with your specific type of Player and filled in
-     * with logic to play your game.
-     */
+    // Get player state
     public Boolean getPlayingState() {
         return this.playing;
+    }
+    
+    public int getBet() {
+        return this.bet;
     }
     
     public String toString() {

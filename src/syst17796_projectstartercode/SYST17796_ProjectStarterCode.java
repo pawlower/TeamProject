@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public class SYST17796_ProjectStarterCode {
     
+    // Collects required info from users, initializes game and returns the game instance
     private static Game initializeGame(Scanner in) {
         // Find out how many players are playing
         int playerCount = -1;
@@ -23,7 +24,7 @@ public class SYST17796_ProjectStarterCode {
         } else {
             System.exit(0);
         }
-        // Generate arraylist of players
+        // Generate arraylist of players, enter name and bet
         ArrayList<Player> players = new ArrayList<Player>();
         for (int i = 0; i < playerCount; i++) {
             System.out.println("Enter a name for player " + (i + 1));
@@ -35,7 +36,19 @@ public class SYST17796_ProjectStarterCode {
                     playerName = "";
                 }
             } while (playerName.length() < 1);
-            Player p = new Player(playerName);
+            System.out.println("Enter your bets");
+            int bet = 0;
+            do {
+                try {
+                    bet = Integer.parseInt(in.nextLine());
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (bet < 1) {
+                    System.out.println("Bad bet try again");
+                }
+            } while (bet < 1);
+            Player p = new Player(playerName, bet);
             players.add(p);
         }
         // Initialize game and announce whose currently playing
@@ -68,9 +81,10 @@ public class SYST17796_ProjectStarterCode {
             return -1;
         }
     }
+    
     public static void main (String [] args) {
         Scanner in = new Scanner(System.in);
         Game blackJack = initializeGame(in);
-        
+        // blackJack.getDeck().printAllCards();
     }
 }

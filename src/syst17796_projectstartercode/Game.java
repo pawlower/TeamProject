@@ -18,10 +18,13 @@ import java.util.ArrayList;
 public class Game {
 
     private final String name = "Blackjack";//the title of the game
+    private GroupOfCards deck; // Cards belonging to dealer
     private ArrayList<Player> players;// the players of the game
 
     public Game(ArrayList<Player> players) {
         this.players = players;
+        GroupOfCards a = new GroupOfCards(52);
+        this.deck = a;
     }
 
     // Return game name
@@ -34,17 +37,20 @@ public class Game {
         return players;
     }
 
-    /**
-     * @param players the players of this game
-     */
+    // Set players in game
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
+    // Print state of all players in game
     public void printPlayerState() {
         for (Player player : this.players) {
             System.out.println(player.toString());
         }
+    }
+    
+    public GroupOfCards getDeck() {
+        return this.deck;
     }
     /**
      * Play the game. This might be one method or many method calls depending on your game.
@@ -53,6 +59,9 @@ public class Game {
         
     }
 
+    public void serveCards(Player player) {
+        
+    }
     /**
      * When the game is over, use this method to declare and display a winning player.
      */
