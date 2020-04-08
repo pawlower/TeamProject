@@ -24,8 +24,7 @@ public class Game {
 
     public Game(ArrayList<Player> players) {
         this.players = players;
-        GroupOfCards a = new GroupOfCards(52);
-        this.deck = a;
+        this.deck = new GroupOfCards(52);
     }
 
     // Return game name
@@ -74,12 +73,15 @@ public class Game {
         System.out.println(this.getDeck().getSize());
         // Check values/who lost after first deal
         for (Player player : this.getPlayers()) {
-            int value = 0;
-            for (int i = 0; i < player.getHandSize(); i++) {
-                value += player.getHand().get(i).getValue().getDispNum();
-            }
-            if (value > 21) {
-                System.out.println(player.getName() + " lost with their bet of $" + player.setLost());
+            if (!player.getName().equals("Croupier")) {
+                int value = 0;
+                for (int i = 0; i < player.getHandSize(); i++) {
+                    value += player.getHand().get(i).getValue().getDispNum();
+                }
+                if (value > 21) {
+                    System.out.println("The value of " + player.getName() + "'s hand is " + value + " \n" + 
+                    player.getName() + " lost with their bet of $" + player.setLost());
+                }
             }
         }
     }
