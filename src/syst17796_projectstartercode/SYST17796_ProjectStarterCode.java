@@ -90,6 +90,5 @@ public class SYST17796_ProjectStarterCode {
         Game blackJack = initializeGame(in);
         // blackJack.getDeck().printAllCards();
         blackJack.play();
-        blackJack.serveRandomCard(blackJack.getPlayers().get(0));
     }
 }
