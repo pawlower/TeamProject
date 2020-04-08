@@ -15,11 +15,11 @@ public class SYST17796_ProjectStarterCode {
         do {
             System.out.println("How many players are playing? (Max 4)");
             playerCount = checkPlayers(in.nextLine());
-            if (playerCount < 0 || playerCount > 4) {
+            if (playerCount < 1 || playerCount > 4) {
                 System.out.println("Wrong input, please try again");
             }
-        } while (playerCount < 0 || playerCount > 4);
-        if (playerCount > -1 && playerCount < 5) {
+        } while (playerCount < 1 || playerCount > 4);
+        if (playerCount > 0 && playerCount < 5) {
             System.out.println("Players playing: " + playerCount);
         } else {
             System.exit(0);
@@ -36,7 +36,7 @@ public class SYST17796_ProjectStarterCode {
                     playerName = "";
                 }
             } while (playerName.length() < 1);
-            System.out.println("Enter your bets");
+            System.out.println(playerName + ", please enter your bet");
             int bet = 0;
             do {
                 try {

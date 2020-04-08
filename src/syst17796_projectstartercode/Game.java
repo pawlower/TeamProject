@@ -61,10 +61,27 @@ public class Game {
             serveRandomCard(player);
             serveRandomCard(player);
             for (int i = 0; i < player.getHand().size(); i++) {
-                System.out.println(player.getName() + " has a " + player.getHand().get(i));
+                if (player.getName().equals("Croupier") && i == 1) {
+                    System.out.println(player.getName() + "'s second card is hidden");
+                    System.out.println("Dev check: " + player.getName() + " has a " + player.getHand().get(i));
+                } else {
+                    System.out.println(player.getName() + " has a " + player.getHand().get(i));
+                }
+                
             }
         }
+        // Integrity check of deck size
         System.out.println(this.getDeck().getSize());
+        // Check values/who lost after first deal
+        for (Player player : this.getPlayers()) {
+            int value = 0;
+            for (int i = 0; i < player.getHandSize(); i++) {
+                value += player.getHand().get(i).getValue().getDispNum();
+            }
+            if (value > 21) {
+                System.out.println(player.getName() + " lost with their bet of $" + player.setLost());
+            }
+        }
     }
 
     // serves the passed player a card. Reduces size of deck by 1 and increases player hand size by 1

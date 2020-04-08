@@ -68,6 +68,12 @@ public class Player {
         return this.bet;
     }
     
+    // When player loses game, report the amount of money they lost.
+    public int setLost() {
+        this.playing = false;
+        return this.getBet();
+    }
+    
     public String toString() {
         if (this.getPlayingState()) {
             return this.getName() + " is currently playing" ;
