@@ -6,6 +6,7 @@
 package syst17796_projectstartercode;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * The class that models your game. You should create a more specific child of this class and instantiate the methods
@@ -52,6 +53,7 @@ public class Game {
     public GroupOfCards getDeck() {
         return this.deck;
     }
+    
     /**
      * Play the game. This might be one method or many method calls depending on your game.
      */
@@ -59,9 +61,14 @@ public class Game {
         
     }
 
-    public void serveCards(Player player) {
-        
+    // serves the passed player a card. Reduces size of deck by 1 and increases player hand size by 1
+    public void serveRandomCard(Player player) {
+        // Retrieve a random card based on the current deck size
+        int random = (int) Math.floor((Math.random() * ((this.deck.getSize() - 1) + 1)));
+        player.recieveCard(this.deck.getCard(random));
+        this.deck.removeCard(random);
     }
+    
     /**
      * When the game is over, use this method to declare and display a winning player.
      */

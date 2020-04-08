@@ -86,5 +86,6 @@ public class SYST17796_ProjectStarterCode {
         Scanner in = new Scanner(System.in);
         Game blackJack = initializeGame(in);
         // blackJack.getDeck().printAllCards();
+        blackJack.serveRandomCard(blackJack.getPlayers().get(0));
     }
 }

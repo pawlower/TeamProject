@@ -20,19 +20,17 @@ public class GroupOfCards {
 
     //The group of cards, stored in an ArrayList
     private ArrayList<Card> cards;
-    private int size;//the size of the grouping
 
     public GroupOfCards(int size) {
-        this.size = size;
-        this.cards = this.generateCards();
+        this.cards = this.generateCards(size);
     }
     
-    // Will generate a 52 card deck iteratively
-    public ArrayList<Card> generateCards() {
-        ArrayList<Card> cards = new ArrayList<Card>();
-        for (int i = 0; i < this.getSize()/13; i++) { // For each suit in deck size (e.g 52/13 = 4 iterations)
+    // Will generate a 52 card deck iteratively. Will only function if running at initialization
+    private ArrayList<Card> generateCards(int size) {
+        ArrayList<Card> cards = new ArrayList<Card>(size);
+        for (int i = 0; i < size/13; i++) { // For each suit in deck size (e.g 52/13 = 4 iterations)
             Suits suit = Suits.values()[i];
-            for (int j = 0; j < this.getSize()/4; j++) { // For each value (e.g 13)
+            for (int j = 0; j < size/4; j++) { // For each value (e.g 13)
                 Values val = Values.values()[j];
                 Card card = new Card(val, suit);
                 cards.add(card);
@@ -46,13 +44,21 @@ public class GroupOfCards {
         return cards;
     }
 
+    public Card getCard(int v) {
+        return this.getCards().get(v);
+    }
+    
+    // Removes a specific card from the deck. Most likely because it is being given to another player
+    public void removeCard(int v) {
+        this.cards.remove(v);
+    }
     public void shuffle() {
         Collections.shuffle(cards);
     }
 
-    // Get size
+    // Get current size of deck
     public int getSize() {
-        return size;
+        return this.getCards().size();
     }
     
     // Checks the integrity of the deck

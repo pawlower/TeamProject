@@ -44,6 +44,18 @@ public class Player {
         return this.playing;
     }
     
+    public void recieveCard(Card card) {
+        this.hand.add(card);
+    }
+    
+    public ArrayList<Card> getHand() {
+        return this.hand;
+    }
+    
+    public int getHandSize() {
+        return this.hand.size();
+    }
+    
     public int getBet() {
         return this.bet;
     }
