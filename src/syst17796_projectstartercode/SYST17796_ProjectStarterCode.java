@@ -51,6 +51,9 @@ public class SYST17796_ProjectStarterCode {
             Player p = new Player(playerName, bet);
             players.add(p);
         }
+        // Add dealer to group of players
+        Player d = new Player("Croupier", true);
+        players.add(d);
         // Initialize game and announce whose currently playing
         Game blackJack = new Game(players);
         String blurb = "";
@@ -66,7 +69,7 @@ public class SYST17796_ProjectStarterCode {
             }
         }
         blurb += " is currently playing";
-        System.out.println(blurb);
+        System.out.println(blurb);        
         // Return game to main method
         return blackJack;
     };
@@ -86,6 +89,7 @@ public class SYST17796_ProjectStarterCode {
         Scanner in = new Scanner(System.in);
         Game blackJack = initializeGame(in);
         // blackJack.getDeck().printAllCards();
+        blackJack.play();
         blackJack.serveRandomCard(blackJack.getPlayers().get(0));
     }
 }

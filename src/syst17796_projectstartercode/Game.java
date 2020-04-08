@@ -19,7 +19,7 @@ import java.util.Random;
 public class Game {
 
     private final String name = "Blackjack";//the title of the game
-    private GroupOfCards deck; // Cards belonging to dealer
+    private GroupOfCards deck; // Deck of cards currently playing with
     private ArrayList<Player> players;// the players of the game
 
     public Game(ArrayList<Player> players) {
@@ -54,11 +54,17 @@ public class Game {
         return this.deck;
     }
     
-    /**
-     * Play the game. This might be one method or many method calls depending on your game.
-     */
+    // Begin the game
     public void play() {
-        
+        // Serve each player two cards from deck
+        for (Player player : this.getPlayers()) {
+            serveRandomCard(player);
+            serveRandomCard(player);
+            for (int i = 0; i < player.getHand().size(); i++) {
+                System.out.println(player.getName() + " has a " + player.getHand().get(i));
+            }
+        }
+        System.out.println(this.getDeck().getSize());
     }
 
     // serves the passed player a card. Reduces size of deck by 1 and increases player hand size by 1

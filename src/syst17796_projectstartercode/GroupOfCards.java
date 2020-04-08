@@ -25,7 +25,8 @@ public class GroupOfCards {
         this.cards = this.generateCards(size);
     }
     
-    // Will generate a 52 card deck iteratively. Will only function if running at initialization
+    // Will generate a 52 card deck iteratively and then shuffle deck. 
+    // Will only function if running at initialization
     private ArrayList<Card> generateCards(int size) {
         ArrayList<Card> cards = new ArrayList<Card>(size);
         for (int i = 0; i < size/13; i++) { // For each suit in deck size (e.g 52/13 = 4 iterations)
@@ -36,9 +37,25 @@ public class GroupOfCards {
                 cards.add(card);
             }
         }
-        return cards;
+        return this.shuffle(cards);
     }
 
+    public ArrayList<Card> shuffle(ArrayList<Card> cards) {
+        ArrayList<Card> shuffled = new ArrayList<Card>();
+        do {
+            // Random value simulating picking up random card, add to shuffled, remove from generated
+            int random = (int) Math.floor((Math.random() * ((cards.size() - 1) + 1)));
+            shuffled.add(cards.get(random));
+            cards.remove(random);
+        } while (cards.size() > 0);
+        // Can print all cards to ensure deck integrity
+//        int i = 0;
+//        for (Card card : shuffled) {
+//            System.out.println(i++);
+//            System.out.println(card);
+//        }
+        return shuffled;
+    }
     // Will get all cards from group of cards
     public ArrayList<Card> getCards() {
         return cards;

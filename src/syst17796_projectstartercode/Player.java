@@ -20,6 +20,7 @@ public class Player {
     private boolean playing = false;
     private ArrayList<Card> hand = new ArrayList<Card>();
     private int bet = 0;
+    private boolean dealer = false;
     
     // A constructor that allows you to set the player's unique ID
 
@@ -27,6 +28,13 @@ public class Player {
         this.name = name;
         this.bet = bet;
         this.playing = true;
+    }
+    
+    // If player is a dealer, use this constructor to set dealer boolean to true
+    public Player(String name, Boolean dealer) {
+        this.name = name;
+        this.playing = true;
+        this.dealer = dealer; 
     }
 
     // Player name
