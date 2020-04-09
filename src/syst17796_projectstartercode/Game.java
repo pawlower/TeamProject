@@ -114,11 +114,11 @@ public class Game {
                         System.out.println("Croupier's hand below 17, hit");
                         System.out.println("Drew " + this.serveRandomCard(player) + ", Croupiers hand totals: " + player.getHandValue());
                         if (player.getHandValue() > 21) {
-                            System.out.println(player.getHandValue() + " for me (Dealer loses)");
+                            System.out.println("Croupier: " + player.getHandValue() + " for me (Dealer loses)");
                             for (Player pWon : this.getPlayers()) {
-                                if (!player.getName().equals("Croupier")) {
+                                if (!pWon.getName().equals("Croupier")) {
                                     if (pWon.getPlayingState()) {
-                                        System.out.println(player.getName() + " won " + pWon.setWon(false));
+                                        System.out.println(pWon.getName() + " won " + pWon.setWon(false));
                                     }
                                 }
                             }
@@ -128,7 +128,7 @@ public class Game {
                     System.out.println("Dealer wins, everyone loses");
                     int dealerTake = 0;
                     for (Player pLost : this.getPlayers()) {
-                        if (!player.getName().equals("Croupier")) {
+                        if (!pLost.getName().equals("Croupier")) {
                             if (pLost.getPlayingState()) {
                                 System.out.println(pLost.getName() + " lost " + pLost.setLost());
                                 dealerTake += pLost.getBet();
