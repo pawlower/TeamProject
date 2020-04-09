@@ -142,6 +142,7 @@ public class Game {
             }
         }
         
+        // TODO
         // End of game. Must check dealers handvalue with a loop (Player player : this.getPlayers() ) {
         // if player.getName().equals("Croupier")
         // if players hand > croupiers, player.setWon(), if player hand < croupiers, player.setLost()
