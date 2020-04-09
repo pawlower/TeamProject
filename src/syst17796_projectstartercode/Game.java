@@ -5,6 +5,7 @@
  */
 package syst17796_projectstartercode;
 
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -54,7 +55,7 @@ public class Game {
     }
     
     // Begin the game
-    public void play() {
+    public void play(Scanner in) {
         // Serve each player two cards from deck
         for (Player player : this.getPlayers()) {
             serveRandomCard(player);
@@ -66,7 +67,6 @@ public class Game {
                 } else {
                     System.out.println(player.getName() + " has a " + player.getHand().get(i));
                 }
-                
             }
         }
         // Integrity check of deck size
@@ -74,24 +74,88 @@ public class Game {
         // Check values/who lost after first deal
         for (Player player : this.getPlayers()) {
             if (!player.getName().equals("Croupier")) {
-                int value = 0;
-                for (int i = 0; i < player.getHandSize(); i++) {
-                    value += player.getHand().get(i).getValue().getDispNum();
-                }
+                int value = player.getHandValue();
                 if (value > 21) {
                     System.out.println("The value of " + player.getName() + "'s hand is " + value + " \n" + 
                     player.getName() + " lost with their bet of $" + player.setLost());
                 }
+                if (value == 21) { // Blackjack
+                    // setWon(true) means true blackjack boolean. Player wins 1.5x
+                    System.out.println("Blackjack! " + player.getName() + " won $" + player.setWon(true));
+                }
             }
         }
+        // Loop through to prompt for hit, stay, lose, win functionality
+        for (Player player : this.getPlayers()) {
+            // If iterated player is not the dealer and is currently playing
+            if (!player.getName().equals("Croupier") && player.getPlayingState()) {
+                System.out.println("Croupier: for " + player.getName() + " " + player.getHandValue());
+                // player in stay state is set to false until the say stay or hit 21
+                boolean stay = false;
+                do {
+                    System.out.println("Hit? (hit/stay)");
+                    String response = in.nextLine();
+                    if (response.equals("hit") || response.equals("Hit")) {
+                        System.out.println("Croupier: " + this.serveRandomCard(player) + ", " + player.getHandValue());
+                        if (player.getHandValue() > 21) {
+                            System.out.println("The value of " + player.getName() + "'s hand is " + player.getHandValue() + " " +
+                            player.getName() + " lost with their bet of $" + player.setLost());
+                        } else if (player.getHandValue() == 21) {
+                            System.out.println(player.getName() + " won $" + player.setWon(false));
+                        }
+                    } else {
+                        stay = true;
+                    }
+                } while (!stay && player.getPlayingState());
+            } else if (player.getName().equals("Croupier")) {
+                System.out.println("Dealers turn");
+                if (player.getHandValue() < 17) {
+                    while (player.getHandValue() < 17) {
+                        System.out.println("Croupier's hand below 17, hit");
+                        System.out.println("Drew " + this.serveRandomCard(player) + ", Croupiers hand totals: " + player.getHandValue());
+                        if (player.getHandValue() > 21) {
+                            System.out.println(player.getHandValue() + " for me (Dealer loses)");
+                            for (Player pWon : this.getPlayers()) {
+                                if (!player.getName().equals("Croupier")) {
+                                    if (pWon.getPlayingState()) {
+                                        System.out.println(player.getName() + " won " + pWon.setWon(false));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else if (player.getHandValue() == 21) { // dealer wins
+                    System.out.println("Dealer wins, everyone loses");
+                    int dealerTake = 0;
+                    for (Player pLost : this.getPlayers()) {
+                        if (!player.getName().equals("Croupier")) {
+                            if (pLost.getPlayingState()) {
+                                System.out.println(pLost.getName() + " lost " + pLost.setLost());
+                                dealerTake += pLost.getBet();
+                            }
+                        }
+                    }
+                    System.out.println("Croupier takes everyones money\n$" + dealerTake);
+                } else if (player.getHandValue() >= 17) { // dealer stays
+                    System.out.println("Croupier stays with " + player.getHandValue());
+                }
+            }
+        }
+        
+        // End of game. Must check dealers handvalue with a loop (Player player : this.getPlayers() ) {
+        // if player.getName().equals("Croupier")
+        // if players hand > croupiers, player.setWon(), if player hand < croupiers, player.setLost()
+        // if player hand equals dealers hand... must check blackjack rules
     }
 
     // serves the passed player a card. Reduces size of deck by 1 and increases player hand size by 1
-    public void serveRandomCard(Player player) {
+    public Card serveRandomCard(Player player) {
         // Retrieve a random card based on the current deck size
         int random = (int) Math.floor((Math.random() * ((this.deck.getSize() - 1) + 1)));
+        Card card = this.deck.getCard(random);
         player.recieveCard(this.deck.getCard(random));
         this.deck.removeCard(random);
+        return card;
     }
     
     /**

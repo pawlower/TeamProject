@@ -34,6 +34,11 @@ public class SYST17796_ProjectStarterCode {
                 playerName = in.nextLine();
                 if (playerName.length() > 26 || playerName.length() == 0) {
                     playerName = "";
+                    System.out.println("Bad name, please enter a name that is under 26 characters");
+                }
+                if (playerName.equals("Croupier")) {
+                    playerName = "";
+                    System.out.println("You cannot be the dealer!");
                 }
             } while (playerName.length() < 1);
             System.out.println(playerName + ", please enter your bet");
@@ -89,6 +94,6 @@ public class SYST17796_ProjectStarterCode {
         Scanner in = new Scanner(System.in);
         Game blackJack = initializeGame(in);
         // blackJack.getDeck().printAllCards();
-        blackJack.play();
+        blackJack.play(in);
     }
 }

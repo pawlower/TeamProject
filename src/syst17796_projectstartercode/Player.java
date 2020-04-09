@@ -21,6 +21,7 @@ public class Player {
     private ArrayList<Card> hand = new ArrayList<Card>();
     private int bet = 0;
     private boolean dealer = false;
+    private int won = 0;
     
     // A constructor that allows you to set the player's unique ID
 
@@ -64,6 +65,13 @@ public class Player {
         return this.hand.size();
     }
     
+    public int getHandValue() {
+        int value = 0;
+        for (Card card : this.getHand()) {
+            value += card.getValue().getDispNum();
+        }
+        return value;
+    }
     public int getBet() {
         return this.bet;
     }
@@ -72,6 +80,17 @@ public class Player {
     public int setLost() {
         this.playing = false;
         return this.getBet();
+    }
+    
+    // Will set player playing state to false, sets won to amount won and returns value
+    public int setWon(Boolean blackjack) {
+        this.playing = false;
+        if (blackjack) {
+            this.won = (int) (this.getBet()*1.5);
+        } else {
+            this.won = this.getBet()*2;
+        }
+        return this.won;
     }
     
     public String toString() {
