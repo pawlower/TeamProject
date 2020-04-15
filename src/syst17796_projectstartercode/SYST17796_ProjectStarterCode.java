@@ -9,14 +9,16 @@ import java.util.Scanner;
 public class SYST17796_ProjectStarterCode {
     
     // Collects required info from users, initializes game and returns the game instance
-    private static Game initializeGame(Scanner in) {
+    private static Game initializeGame(Scanner in, ArrayList<Player> initPlayers) {
         // Find out how many players are playing
         int playerCount = -1;
         do {
             System.out.println("How many players are playing? (Max 4)");
             playerCount = checkPlayers(in.nextLine());
-            if (playerCount < 1 || playerCount > 4) {
-                System.out.println("Wrong input, please try again");
+            if (playerCount < 1) {
+                System.out.println("You can't play a game without a player");
+            } else if (playerCount > 4) {
+                System.out.println("Blackjack cannot be played with more than 4 players");
             }
         } while (playerCount < 1 || playerCount > 4);
         if (playerCount > 0 && playerCount < 5) {
@@ -49,10 +51,12 @@ public class SYST17796_ProjectStarterCode {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-                if (bet < 1) {
-                    System.out.println("Bad bet try again");
+                if (bet < 2) {
+                    System.out.println("Croupier: Sorry, you cant bet any less than 2 dollars");
+                } else if (bet > 500) {
+                    System.out.println("Croupier: No bets over $500");
                 }
-            } while (bet < 1);
+            } while (bet < 2 || bet > 500);
             Player p = new Player(playerName, bet);
             players.add(p);
         }
@@ -92,8 +96,11 @@ public class SYST17796_ProjectStarterCode {
     
     public static void main (String [] args) {
         Scanner in = new Scanner(System.in);
-        Game blackJack = initializeGame(in);
+        Game blackJack = initializeGame(in, null);
         // blackJack.getDeck().printAllCards();
-        blackJack.play(in);
+        ArrayList<Player> newGamePlayers = blackJack.play(in);
+        if (!newGamePlayers.isEmpty()) {
+            initializeGame(in, newGamePlayers);
+        }
     }
 }

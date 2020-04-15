@@ -55,31 +55,46 @@ public class Game {
     }
     
     // Begin the game
-    public void play(Scanner in) {
+    public ArrayList<Player> play(Scanner in) {
         // Serve each player two cards from deck
         for (Player player : this.getPlayers()) {
             serveRandomCard(player);
             serveRandomCard(player);
+            // Go through each players hand and describe the hand they have
+            // If the player is the croupier, only reveal first card.
             for (int i = 0; i < player.getHand().size(); i++) {
                 if (player.getName().equals("Croupier") && i == 1) {
                     System.out.println(player.getName() + "'s second card is hidden");
-                    System.out.println("Dev check: " + player.getName() + " has a " + player.getHand().get(i));
+                    // System.out.println("Dev check: " + player.getName() + " has a " + player.getHand().get(i));
                 } else {
                     System.out.println(player.getName() + " has a " + player.getHand().get(i));
                 }
             }
         }
+        
+        // A short list of exclamatory phrases to use for speech output
+        ArrayList<String> exclamations = new ArrayList<String>() {{
+            add("Wow");
+            add("Nice");
+            add("Not bad");
+            add("Well played");
+        }};
         // Integrity check of deck size
-        System.out.println(this.getDeck().getSize());
+        // System.out.println(this.getDeck().getSize());
         // Check values/who lost after first deal
         for (Player player : this.getPlayers()) {
             if (!player.getName().equals("Croupier")) {
                 int value = player.getHandValue();
-                if (value > 21) {
+                int altValue = player.getHandValueAlt();
+                // Check if alternate value (counting Aces as 10) is a blackjack
+                // If not, do not need to check  if alt value is over 21 as Ace can be a 1.
+                // The check if normal value exceeds 21 and then check if normal value is a blackjack.
+                if (altValue == 21) {
+                    System.out.println("Blackjack! " + player.getName() + " won $" + player.setWon(true));
+                } else if (value > 21) {
                     System.out.println("The value of " + player.getName() + "'s hand is " + value + " \n" + 
                     player.getName() + " lost with their bet of $" + player.setLost());
-                }
-                if (value == 21) { // Blackjack
+                } else if (value == 21) { // Blackjack
                     // setWon(true) means true blackjack boolean. Player wins 1.5x
                     System.out.println("Blackjack! " + player.getName() + " won $" + player.setWon(true));
                 }
@@ -89,18 +104,28 @@ public class Game {
         for (Player player : this.getPlayers()) {
             // If iterated player is not the dealer and is currently playing
             if (!player.getName().equals("Croupier") && player.getPlayingState()) {
-                System.out.println("Croupier: for " + player.getName() + " " + player.getHandValue());
+                // Print players normal hand value if alternate hand value is over 21
+                String blurb = "Croupier: for " + player.getName() + ", ";
+                for (int i = 0; i < player.getHand().size(); i++) {
+                    blurb += player.getHand().get(i);
+                    if (i != player.getHandSize()-1) {
+                        blurb += ", ";
+                    }
+                }
+                blurb += ", " + (player.getHandValueAlt() > 21 ? player.getHandValue() : player.getHandValueAlt());
+                System.out.println(blurb);
                 // player in stay state is set to false until the say stay or hit 21
                 boolean stay = false;
                 do {
                     System.out.println("Hit? (hit/stay)");
                     String response = in.nextLine();
                     if (response.equals("hit") || response.equals("Hit")) {
-                        System.out.println("Croupier: " + this.serveRandomCard(player) + ", " + player.getHandValue());
+                        System.out.println("Croupier: " + this.serveRandomCard(player) + ", " + 
+                            (player.getHandValueAlt() > 21 ? player.getHandValue() : player.getHandValueAlt()));
                         if (player.getHandValue() > 21) {
-                            System.out.println("The value of " + player.getName() + "'s hand is " + player.getHandValue() + " " +
+                            System.out.println("The value of " + player.getName() + "'s hand is " + player.getHandValue() + ". " +
                             player.getName() + " lost with their bet of $" + player.setLost());
-                        } else if (player.getHandValue() == 21) {
+                        } else if (player.getHandValue() == 21 || player.getHandValueAlt() == 21) {
                             System.out.println(player.getName() + " won $" + player.setWon(false));
                         }
                     } else {
@@ -109,35 +134,54 @@ public class Game {
                 } while (!stay && player.getPlayingState());
             } else if (player.getName().equals("Croupier")) {
                 System.out.println("Dealers turn");
-                if (player.getHandValue() < 17) {
-                    while (player.getHandValue() < 17) {
+                System.out.println("For the dealer:");
+                for (int i = 0; i < player.getHandSize(); i++) {
+                    System.out.println(player.getHand().get(i));
+                }
+                if (player.getHandValue() < 17 && player.getHandValueAlt() < 17) {
+                    while (player.getHandValue() < 17 && player.getHandValueAlt() < 17) {
                         System.out.println("Croupier's hand below 17, hit");
-                        System.out.println("Drew " + this.serveRandomCard(player) + ", Croupiers hand totals: " + player.getHandValue());
+                        System.out.println("Drew " + this.serveRandomCard(player) + ", Croupiers hand totals: " + 
+                            (player.getHandValueAlt() > 21 ? player.getHandValue() : player.getHandValueAlt()));
                         if (player.getHandValue() > 21) {
                             System.out.println("Croupier: " + player.getHandValue() + " for me (Dealer loses)");
+                            player.setLost();
                             for (Player pWon : this.getPlayers()) {
                                 if (!pWon.getName().equals("Croupier")) {
                                     if (pWon.getPlayingState()) {
-                                        System.out.println(pWon.getName() + " won " + pWon.setWon(false));
+                                        System.out.println(exclamations.get((int) Math.floor((Math.random() * ((exclamations.size() - 1) + 1)))) + ", " +
+                                            pWon.getName() + " won $" + pWon.setWon(false));
                                     }
                                 }
                             }
                         }
                     }
-                } else if (player.getHandValue() == 21) { // dealer wins
+                } else if (player.getHandValue() == 21 || player.getHandValueAlt() == 21) { // dealer wins
                     System.out.println("Dealer wins, everyone loses");
                     int dealerTake = 0;
                     for (Player pLost : this.getPlayers()) {
                         if (!pLost.getName().equals("Croupier")) {
                             if (pLost.getPlayingState()) {
-                                System.out.println(pLost.getName() + " lost " + pLost.setLost());
+                                System.out.println(pLost.getName() + " lost $" + pLost.setLost());
                                 dealerTake += pLost.getBet();
                             }
                         }
                     }
                     System.out.println("Croupier takes everyones money\n$" + dealerTake);
-                } else if (player.getHandValue() >= 17) { // dealer stays
-                    System.out.println("Croupier stays with " + player.getHandValue());
+                } else if (player.getHandValue() >= 17 || player.getHandValueAlt() >= 17) { // dealer stays
+                    System.out.println("Croupier stays with " + 
+                        (player.getHandValueAlt() < 21 ? player.getHandValueAlt() : player.getHandValue()));
+                } else if (player.getHandValue() > 21) {
+                    System.out.println("Croupier: " + player.getHandValue() + " for me (Dealer loses)");
+                    player.setLost();
+                    for (Player pWon : this.getPlayers()) {
+                        if (!pWon.getName().equals("Croupier")) {
+                            if (pWon.getPlayingState()) {
+                                System.out.println(exclamations.get((int) Math.floor((Math.random() * ((exclamations.size() - 1) + 1))))
+                                        + ", " + pWon.getName() + " won $" + pWon.setWon(false));
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -147,6 +191,31 @@ public class Game {
         // if player.getName().equals("Croupier")
         // if players hand > croupiers, player.setWon(), if player hand < croupiers, player.setLost()
         // if player hand equals dealers hand... must check blackjack rules
+        
+        Player croupier = this.getPlayers().get(this.getPlayers().size()-1);
+        int croupierValue = (croupier.getHandValueAlt() > 21 ? croupier.getHandValue() : croupier.getHandValueAlt());
+        for (Player player : this.getPlayers()) {
+            // If player is still playing and iterated is not the croupier, run win/loss logic at end of game
+            if (!player.getName().equals("Croupier") && player.getPlayingState()) {
+                int playerValue = (player.getHandValueAlt() > 21 ? player.getHandValue() : player.getHandValueAlt());
+                // Player loses if they bust or croupiers hand is greater than theirs
+                System.out.println("Croupier: " + player.getName() + ", " + playerValue);
+                if (playerValue > 21 || croupierValue > playerValue || playerValue == croupierValue) {
+                    System.out.println(player.getName() + " lost their bet of $" + player.setLost());
+                } else if (playerValue > croupierValue) {
+                    System.out.println(exclamations.get((int) Math.floor((Math.random() * ((exclamations.size() - 1) + 1))))
+                            + ", " + player.getName() + " won their bet of $" + player.setWon(false));
+                }
+            }
+        }
+        
+        System.out.println("Play again?(y/n");
+        String again = in.nextLine();
+        if (again.equals("y")) {
+            return this.getPlayers();
+        } else {
+            return null;
+        }
     }
 
     // serves the passed player a card. Reduces size of deck by 1 and increases player hand size by 1

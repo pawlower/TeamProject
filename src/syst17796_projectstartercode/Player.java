@@ -72,6 +72,23 @@ public class Player {
         }
         return value;
     }
+    
+    /**
+     * Get value of hand when aces are counted 
+     * @return 
+     */
+    public int getHandValueAlt() {
+        int value = 0;
+        for (Card card : this.getHand()) {
+            if  (card.getValue().getDispNum() == 1) {
+                value += 11;
+            } else {
+                value += card.getValue().getDispNum();
+            }
+        }
+        return value;
+    }
+    
     public int getBet() {
         return this.bet;
     }
