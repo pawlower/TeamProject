@@ -93,6 +93,10 @@ public class Player {
         return this.bet;
     }
     
+    public void setBet(int bet) {
+        this.bet = bet;
+    }
+    
     // When player loses game, report the amount of money they lost.
     public int setLost() {
         this.playing = false;
@@ -108,6 +112,14 @@ public class Player {
             this.won = this.getBet()*2;
         }
         return this.won;
+    }
+    
+    public Player reset() {
+        this.playing = true;
+        this.getHand().clear();
+        this.bet = 0;
+        this.won = 0;
+        return this;
     }
     
     public String toString() {

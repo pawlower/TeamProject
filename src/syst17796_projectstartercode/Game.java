@@ -54,6 +54,10 @@ public class Game {
         return this.deck;
     }
     
+    public void resetDeck() {
+        this.deck = new GroupOfCards(52);
+    }
+    
     // Begin the game
     public ArrayList<Player> play(Scanner in) {
         // Serve each player two cards from deck
@@ -79,7 +83,7 @@ public class Game {
             add("Not bad");
             add("Well played");
         }};
-        // Integrity check of deck size
+        // Integrity check of deck size, useful for when doing repeat games
         // System.out.println(this.getDeck().getSize());
         // Check values/who lost after first deal
         for (Player player : this.getPlayers()) {
@@ -209,9 +213,12 @@ public class Game {
             }
         }
         
-        System.out.println("Play again?(y/n");
+        System.out.println("Play again?(y/n)");
         String again = in.nextLine();
         if (again.equals("y")) {
+            for (Player player : this.getPlayers()) {
+                player.reset();
+            }
             return this.getPlayers();
         } else {
             return null;
