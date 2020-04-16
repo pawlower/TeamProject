@@ -119,6 +119,27 @@ public class SYST17796_ProjectStarterCode {
         }
     }
     
+    public static void testPlayerDealt() {
+        Player player = new Player("jim", 5);
+        ArrayList<Player> players = new ArrayList<Player>() {{
+            add(player);
+        }};
+        Game game = new Game(players);
+        game.serveRandomCard(player);
+        game.serveRandomCard(player);
+        System.out.println(player.getHand().get(0));
+        System.out.println(player.getHand().get(1));
+    }
+    
+    public static void checkPlayerReset(ArrayList<Player> players) {
+        for (Player player : players) {
+            System.out.println(player.getHand());
+            System.out.println(player.getName());
+            System.out.print(player.getHandValue());
+            System.out.println(player.getPlayingState());
+        }
+    }
+    
     public static void main (String [] args) {
         Scanner in = new Scanner(System.in);
         Game blackJack = initializeGame(in, null);
@@ -126,12 +147,7 @@ public class SYST17796_ProjectStarterCode {
         ArrayList<Player> newGamePlayers = blackJack.play(in);
         do {
             initializeGame(in, newGamePlayers);
-//            for (Player player : newGamePlayers) {
-//                System.out.println(player.getHand());
-//                System.out.println(player.getName());
-//                System.out.print(player.getHandValue());
-//                System.out.println(player.getPlayingState());
-//            }
+            // checkPlayerReset(newGamePlayers);
             blackJack.resetDeck(); // Resets deck and reshuffles (check GroupOfCards class for shuffle functionality)
             newGamePlayers = blackJack.play(in);
         } while (newGamePlayers != null);
