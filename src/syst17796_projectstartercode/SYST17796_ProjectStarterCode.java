@@ -126,6 +126,11 @@ public class SYST17796_ProjectStarterCode {
         ArrayList<Player> newGamePlayers = blackJack.play(in);
         do {
             initializeGame(in, newGamePlayers);
+//            for (Player player : newGamePlayers) {
+//                System.out.println(player.getHand());
+//                System.out.println(player.getName());
+//                System.out.print(player.getHandValue());
+//            }
             blackJack.resetDeck(); // Resets deck and reshuffles (check GroupOfCards class for shuffle functionality)
             newGamePlayers = blackJack.play(in);
         } while (newGamePlayers != null);
