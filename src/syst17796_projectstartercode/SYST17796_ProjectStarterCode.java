@@ -130,6 +130,7 @@ public class SYST17796_ProjectStarterCode {
 //                System.out.println(player.getHand());
 //                System.out.println(player.getName());
 //                System.out.print(player.getHandValue());
+//                System.out.println(player.getPlayingState());
 //            }
             blackJack.resetDeck(); // Resets deck and reshuffles (check GroupOfCards class for shuffle functionality)
             newGamePlayers = blackJack.play(in);
